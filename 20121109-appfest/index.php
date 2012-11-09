@@ -63,6 +63,9 @@
   </head>
 
   <body>
+    <span id="github">
+      <a href="https://github.com/jblyberg/dpla"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a> 
+    </span>
 
     <div class="container-narrow">
 
@@ -77,14 +80,28 @@
       <hr>
 
       <?if (!$_GET['action'] || $_GET['action'] == 'search' || $_POST['action'] == 'search') { ?>
-      .
       <div class="jumbotron">
         <h1>Search all the things:</h1>
         <p class="lead">
           <form method="post" action="<? print $_SERVER['PHP_SELF']; ?>">
           <fieldset>
             <input type="text" name="term" placeholder="What do you seek...?" value="<? print $_POST['term']; ?>">
-            <div><a class="btn btn-large btn-success" href="#">Search</a></div>
+             in <select name="field">
+              <option value="all">Everything</option>
+              <option value="title" <? print ($_POST['field'] == 'title' ? 'selected' : ''); ?>>Title</option>
+              <option value="description" <? print ($_POST['field'] == 'description' ? 'selected' : ''); ?>>Description</option>
+              <option value="subject" <? print ($_POST['field'] == 'subject' ? 'selected' : ''); ?>>Subject</option>
+              <option value="dplacontributor" <? print ($_POST['field'] == 'dplacontributor' ? 'selected' : ''); ?>>DPLA Contributor</option>
+              <option value="creator" <? print ($_POST['field'] == 'creator' ? 'selected' : ''); ?>>Creator</option>
+              <option value="type" <? print ($_POST['field'] == 'type' ? 'selected' : ''); ?>>Type</option>
+              <option value="publisher" <? print ($_POST['field'] == 'publisher' ? 'selected' : ''); ?>>Publisher</option>
+              <option value="format" <? print ($_POST['field'] == 'format' ? 'selected' : ''); ?>>Format</option>
+              <option value="rights" <? print ($_POST['field'] == 'rights' ? 'selected' : ''); ?>>Rights</option>
+              <option value="contributor" <? print ($_POST['field'] == 'contributor' ? 'selected' : ''); ?>>Contributor</option>
+              <option value="spatial" <? print ($_POST['field'] == 'spatial' ? 'selected' : ''); ?>>Spatial</option>
+              <option value="ispartof" <? print ($_POST['field'] == 'ispartof' ? 'selected' : ''); ?>>Part of</option>
+            </select>
+            <div><button class="btn btn-large btn-success" type="submit" class="btn">Search</button></div>
             <input type="hidden" name="submitted" value="1">
             <input type="hidden" name="action" value="search">
           </fieldset>
@@ -125,7 +142,11 @@
         $dpla = new dpla;
 
         if ($_POST['action'] == 'search') {
-          $searchtype = NULL;
+          if (!$_POST['field'] || $_POST['field'] == 'all') {
+            $searchtype = NULL;
+          } else {
+            $searchtype = $_POST['field'];
+          }
           $term = $_POST['term'];
 
           $result = $dpla->search_item($term, $searchtype);
