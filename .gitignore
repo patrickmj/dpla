@@ -16,3 +16,4 @@ npm-debug.log
 
 dsn.php
 .DS_Store
+sftp-config.json

@@ -22,7 +22,8 @@ class dpla
 			return array('error' => 'Invalid search type');
 		}
 
-		$result = json_decode(file_get_contents($this->api_base_url . 'items?' . $searchtype . '=' . $term));
+		$term = urlencode($term);
+		$result = json_decode(file_get_contents($this->api_base_url . 'items?' . $searchtype . '=' . $term), TRUE);
 
 		return $result;
 
@@ -34,7 +35,7 @@ class dpla
 			return array('error' => 'Invalid item query');
 		}
 		$item_list = implode(',', $item_ids);
-		$result = json_decode(file_get_contents($this->api_base_url . 'items/' . $item_list));
+		$result = json_decode(file_get_contents($this->api_base_url . 'items/' . $item_list), TRUE);
 
 		return $result;
 
