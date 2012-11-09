@@ -28,7 +28,15 @@ class dpla
 
 	}
 
-	public function item_fetch($item_id) {
+	public function item_fetch($item_ids = array()) {
+
+		if (!is_array($item_ids)) {
+			return array('error' => 'Invalid item query');
+		}
+		$item_list = implode(',', $item_ids);
+		$result = json_decode(file_get_contents($this->api_base_url . 'items/' . $item_list));
+
+		return $result;
 
 	}
 
